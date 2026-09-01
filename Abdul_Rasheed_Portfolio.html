@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdul Rasheed Soomro — Robotics Hardware Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0a1c2e;
+    --navy-panel:#0f2740;
+    --navy-panel-2:#132e4d;
+    --grid-line:#1f3d5c;
+    --amber:#e8a33d;
+    --amber-dim:#8a651f;
+    --ink:#eaf0f5;
+    --ink-dim:#7f96ab;
+    --ink-faint:#4d6178;
+    --led-green:#5fd17a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--navy-deep);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:48px 48px;
+    background-attachment:fixed;
+  }
+  ::selection{background:var(--amber); color:var(--navy-deep);}
+  a{color:inherit;}
+
+  .display{font-family:'Space Grotesk', sans-serif;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+
+  .wrap{max-width:1000px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- Corner crop marks ---------- */
+  .crop{position:fixed; width:16px; height:16px; z-index:50; pointer-events:none;}
+  .crop::before,.crop::after{content:'';position:absolute; background:var(--ink-faint);}
+  .crop::before{width:16px; height:1px; top:0;}
+  .crop::after{width:1px; height:16px; left:0;}
+  .crop.tl{top:16px; left:16px;}
+  .crop.tr{top:16px; right:16px;}
+  .crop.bl{bottom:16px; left:16px;}
+  .crop.br{bottom:16px; right:16px;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:40;
+    background:rgba(10,28,46,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--grid-line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:16px; padding-bottom:16px;}
+  .nav-id{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink-dim);}
+  .nav-id b{color:var(--amber); font-weight:600;}
+  .nav-links{display:flex; gap:28px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.04em;}
+  .nav-links a{color:var(--ink-dim); text-decoration:none; transition:color .15s;}
+  .nav-links a:hover{color:var(--amber);}
+  @media (max-width:640px){ .nav-links{display:none;} }
+
+  /* ---------- Hero / Title block ---------- */
+  header.hero{padding:100px 0 80px; position:relative;}
+  .titleblock-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--amber-dim); color:var(--amber);
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.1em;
+    padding:5px 10px; margin-bottom:28px;
+  }
+  .led{width:7px; height:7px; border-radius:50%; background:var(--led-green); box-shadow:0 0 8px var(--led-green);}
+  h1.name{
+    font-size:clamp(40px, 7vw, 74px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.02;
+    max-width:900px;
+  }
+  .role-line{
+    margin-top:22px;
+    font-size:clamp(17px, 2.4vw, 22px);
+    color:var(--ink-dim);
+    max-width:640px;
+    font-weight:400;
+  }
+  .role-line b{color:var(--ink); font-weight:600;}
+  .hero-desc{margin-top:22px; max-width:600px; color:var(--ink-dim); font-size:15.5px;}
+
+  .chip-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:36px;}
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+    border:1px solid var(--grid-line); color:var(--ink-dim);
+    padding:8px 14px; text-decoration:none;
+    transition:border-color .15s, color .15s;
+  }
+  .chip:hover{border-color:var(--amber); color:var(--amber);}
+
+  /* ---------- Section shell ---------- */
+  section{padding:76px 0; border-top:1px solid var(--grid-line);}
+  .sec-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:44px; flex-wrap:wrap; gap:10px;}
+  .sec-title{font-size:clamp(24px,3.4vw,34px); font-weight:600; letter-spacing:-0.01em;}
+  .sec-index{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint);}
+
+  /* ---------- Fleet roster (signature element) ---------- */
+  .fleet-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:1px; background:var(--grid-line); border:1px solid var(--grid-line);}
+  .fleet-card{background:var(--navy-panel); padding:26px 24px; display:flex; flex-direction:column; gap:12px;}
+  .fleet-card-top{display:flex; align-items:center; justify-content:space-between;}
+  .fleet-name{font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:18px;}
+  .fleet-status{display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--led-green); text-transform:uppercase; letter-spacing:.08em;}
+  .fleet-icon{width:34px; height:34px; color:var(--amber); flex-shrink:0;}
+  .fleet-desc{color:var(--ink-dim); font-size:13.5px; line-height:1.55;}
+  .fleet-tag{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-faint); letter-spacing:.06em;}
+
+  /* ---------- Service log (experience) ---------- */
+  .log{border-left:1px solid var(--grid-line); padding-left:32px; display:flex; flex-direction:column; gap:48px; margin-left:6px;}
+  .log-entry{position:relative;}
+  .log-entry::before{
+    content:''; position:absolute; left:-37.5px; top:4px;
+    width:9px; height:9px; background:var(--amber); border:2px solid var(--navy-deep);
+  }
+  .log-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--amber); letter-spacing:.05em;}
+  .log-role{font-family:'Space Grotesk', sans-serif; font-size:20px; font-weight:600; margin-top:6px;}
+  .log-org{color:var(--ink-dim); font-size:14px; margin-top:2px;}
+  .log-body{margin-top:14px; color:var(--ink-dim); font-size:14.5px; max-width:680px;}
+  .log-body ul{padding-left:18px; display:flex; flex-direction:column; gap:8px;}
+  .log-body li::marker{color:var(--amber-dim);}
+
+  /* ---------- Builds (projects) ---------- */
+  .build-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--grid-line); border:1px solid var(--grid-line);}
+  @media (max-width:720px){ .build-grid{grid-template-columns:1fr;} }
+  .build-card{background:var(--navy-panel); padding:32px;}
+  .build-tag{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--amber); letter-spacing:.1em; text-transform:uppercase;}
+  .build-title{font-family:'Space Grotesk', sans-serif; font-size:21px; font-weight:600; margin-top:10px;}
+  .build-desc{color:var(--ink-dim); font-size:14px; margin-top:12px;}
+  .build-link{display:inline-block; margin-top:18px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--ink); border-bottom:1px solid var(--amber-dim); text-decoration:none;}
+  .build-link:hover{color:var(--amber);}
+  .log-cert{display:inline-block; margin-top:14px; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); border-bottom:1px solid var(--amber-dim); text-decoration:none;}
+  .log-cert:hover{color:var(--amber);}
+
+  /* ---------- Grants strip ---------- */
+  .grant-list{display:flex; flex-direction:column;}
+  .grant-row{
+    display:grid; grid-template-columns:120px 1fr auto; gap:20px; align-items:baseline;
+    padding:20px 0; border-bottom:1px solid var(--grid-line);
+  }
+  .grant-row:first-child{border-top:1px solid var(--grid-line);}
+  @media (max-width:640px){ .grant-row{grid-template-columns:1fr; gap:6px;} }
+  .grant-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint);}
+  .grant-name{font-size:15px;}
+  .grant-org{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--amber); text-align:right;}
+  @media (max-width:640px){ .grant-org{text-align:left;} }
+
+  /* ---------- Skills spec sheet ---------- */
+  .spec-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:32px;}
+  .spec-group-title{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--amber); letter-spacing:.08em; text-transform:uppercase; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--grid-line);}
+  .spec-items{display:flex; flex-direction:column; gap:9px; font-size:14px; color:var(--ink-dim);}
+  .spec-items span{color:var(--ink-faint); font-family:'IBM Plex Mono', monospace; font-size:11px; margin-right:8px;}
+  .spec-items a{color:inherit; text-decoration:none; border-bottom:1px dotted var(--ink-faint); transition:color .15s, border-color .15s;}
+  .spec-items a:hover{color:var(--amber); border-bottom-color:var(--amber);}
+
+  /* ---------- Footer / contact title block ---------- */
+  footer{padding:80px 0 60px; border-top:1px solid var(--grid-line);}
+  .footer-title{font-size:clamp(28px,4.5vw,44px); font-weight:600; max-width:600px; line-height:1.1;}
+  .footer-sub{color:var(--ink-dim); margin-top:16px; max-width:480px; font-size:15px;}
+  .footer-grid{display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;}
+  .footer-btn{
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    border:1px solid var(--amber); color:var(--amber);
+    padding:12px 20px; text-decoration:none;
+    transition:background .15s, color .15s;
+  }
+  .footer-btn:hover{background:var(--amber); color:var(--navy-deep);}
+  .footer-meta{margin-top:60px; padding-top:24px; border-top:1px solid var(--grid-line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-faint);}
+
+  [data-reveal]{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
+  [data-reveal].in{opacity:1; transform:translateY(0);}
+  html.no-js [data-reveal]{opacity:1; transform:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    [data-reveal]{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  a:focus-visible, button:focus-visible{outline:2px solid var(--amber); outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crop tl"></div><div class="crop tr"></div><div class="crop bl"></div><div class="crop br"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-id"><b>AR-01</b> / SOOMRO.A</div>
+    <div class="nav-links">
+      <a href="#education">Education</a>
+      <a href="#fleet">Fleet</a>
+      <a href="#log">Experience</a>
+      <a href="#builds">Builds</a>
+      <a href="#grants">Grants</a>
+      <a href="#skills">Skills</a>
+      <a href="#learning">Learning</a>
+      <a href="#references">References</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="titleblock-tag"><span class="led"></span> AVAILABLE FOR HIRE</div>
+    <h1 class="name display">Abdul Rasheed<br>Soomro</h1>
+    <p class="role-line">Robotics Hardware Engineer — <b>humanoid & mobile platforms, embedded systems, lab operations.</b></p>
+    <p class="hero-desc">I like robots that actually work — which in practice means wiring, calibrating, and troubleshooting hardware as much as writing the computer-vision code that rides on top of it. I've spent three years keeping a university robotics lab running end to end, and I'm now teaching the next group of engineers to do the same.</p>
+    <div class="chip-row">
+      <a class="chip" href="mailto:abdulrasheed.be15@iba-suk.edu.pk">abdulrasheed.be15@iba-suk.edu.pk</a>
+      <a class="chip" href="tel:+923153404856">+92 315 3404856</a>
+      <a class="chip" href="https://github.com/AbdulRasheed-01" target="_blank" rel="noopener">github.com/AbdulRasheed-01</a>
+      <a class="chip" href="https://www.linkedin.com/in/abdul-rasheed-soomro" target="_blank" rel="noopener">LinkedIn</a>
+      <span class="chip" style="cursor:default;">Sukkur, Sindh, Pakistan</span>
+    </div>
+  </div>
+</header>
+
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Education</h2>
+      <span class="sec-index eyebrow">01 / EDUCATION</span>
+    </div>
+    <div class="grant-list" data-reveal>
+      <div class="grant-row">
+        <span class="grant-date mono">2015 — 2019</span>
+        <span class="grant-name">Bachelor of Engineering, Electrical Engineering</span>
+        <span class="grant-org">SUKKUR IBA UNIVERSITY</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fleet">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Fleet Roster</h2>
+      <span class="sec-index eyebrow">02 / PLATFORMS OPERATED</span>
+    </div>
+    <div class="fleet-grid" data-reveal>
+
+      <div class="fleet-card">
+        <div class="fleet-card-top">
+          <span class="fleet-name">NAO</span>
+          <span class="fleet-status"><span class="led"></span> Maintained</span>
+        </div>
+        <svg class="fleet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="2.4"/><path d="M12 7.4V13M12 13l-4 6M12 13l4 6M8 10h8"/></svg>
+        <p class="fleet-desc">Vision control &amp; kick motion generation — published research, full teardown/reassembly and troubleshooting.</p>
+        <span class="fleet-tag">HUMANOID / ALDEBARAN</span>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-card-top">
+          <span class="fleet-name">Pepper</span>
+          <span class="fleet-status"><span class="led"></span> Maintained</span>
+        </div>
+        <svg class="fleet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="4.5" r="2.2"/><path d="M12 6.7v5.3M8 12h8l1 8H7l1-8Z"/></svg>
+        <p class="fleet-desc">Human-robot interaction demos, sensor diagnostics, student-facing operation and safety training.</p>
+        <span class="fleet-tag">HUMANOID / SOFTBANK</span>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-card-top">
+          <span class="fleet-name">TurtleBot</span>
+          <span class="fleet-status"><span class="led"></span> Maintained</span>
+        </div>
+        <svg class="fleet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="14" r="6"/><circle cx="12" cy="14" r="1.6" fill="currentColor" stroke="none"/><path d="M12 4v3"/></svg>
+        <p class="fleet-desc">ROS2 &amp; Gazebo-based navigation coursework, sensor integration, RoboCup SSL training platform.</p>
+        <span class="fleet-tag">MOBILE / DIFFERENTIAL DRIVE</span>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-card-top">
+          <span class="fleet-name">Jackal</span>
+          <span class="fleet-status"><span class="led"></span> Maintained</span>
+        </div>
+        <svg class="fleet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="9" width="14" height="8" rx="1.5"/><circle cx="7.5" cy="19" r="1.6"/><circle cx="16.5" cy="19" r="1.6"/></svg>
+        <p class="fleet-desc">Outdoor-rated mobile research platform — embedded controller integration and field troubleshooting.</p>
+        <span class="fleet-tag">MOBILE / CLEARPATH</span>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-card-top">
+          <span class="fleet-name">e-puck</span>
+          <span class="fleet-status"><span class="led"></span> Maintained</span>
+        </div>
+        <svg class="fleet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="13" r="7"/><circle cx="9.5" cy="11" r="0.8" fill="currentColor" stroke="none"/><circle cx="14.5" cy="11" r="0.8" fill="currentColor" stroke="none"/></svg>
+        <p class="fleet-desc">Swarm/education robotics — student project support, prototype design and 3D-printed fixtures.</p>
+        <span class="fleet-tag">MOBILE / EDUCATIONAL</span>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-card-top">
+          <span class="fleet-name">Embedded Stack</span>
+          <span class="fleet-status"><span class="led"></span> In use</span>
+        </div>
+        <svg class="fleet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>
+        <p class="fleet-desc">Arduino, ESP32, Raspberry Pi, STM32 — sensor/actuator integration across every platform above.</p>
+        <span class="fleet-tag">CROSS-PLATFORM</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="log">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Service Log</h2>
+      <span class="sec-index eyebrow">03 / EXPERIENCE</span>
+    </div>
+    <div class="log" data-reveal>
+
+      <div class="log-entry">
+        <div class="log-date">OCT 2025 — PRESENT</div>
+        <div class="log-role display">Teacher, Talented &amp; Gifted Program</div>
+        <div class="log-org">SundarSTEM School · Lahore, Pakistan</div>
+        <div class="log-body">
+          <ul>
+            <li>Lead trainer for RoboCup Small Size League — teaching ROS2 and Gazebo simulation, mentoring students for IOI.</li>
+            <li>Teaching Introduction to AI (UC Berkeley CS188), Machine Learning (MIT), and Introduction to Robotics (CMU) curricula.</li>
+            <li>Teaching TinkerCAD and SolidWorks for 3D design and printing.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-date">OCT 2022 — OCT 2025</div>
+        <div class="log-role display">Robotics Engineer</div>
+        <div class="log-org">Sukkur IBA University · Sukkur, Pakistan</div>
+        <div class="log-body">
+          <ul>
+            <li>Maintained, operated, assembled, and troubleshot a lab fleet of humanoid and mobile platforms supporting research, teaching, and student projects.</li>
+            <li>Managed daily lab operations — hardware, PCs, sensors, controllers — ensuring reliable uptime for research and education.</li>
+            <li>Integrated and debugged embedded systems on Arduino, ESP32, Raspberry Pi, and STM32.</li>
+            <li>Built robotics and computer-vision applications in Python, OpenCV, NumPy, and YOLO.</li>
+            <li>Supported undergraduate CAD modeling, 3D printing, and final-year prototype development.</li>
+          </ul>
+          <a class="log-cert" href="https://github.com/AbdulRasheed-01/Certification/blob/main/Robotics%20Engineer%20Job%20Certificate.png" target="_blank" rel="noopener">View employment certificate →</a>
+        </div>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-date">AUG 2024 — PRESENT</div>
+        <div class="log-role display">Visiting Faculty</div>
+        <div class="log-org">Sukkur IBA University</div>
+        <div class="log-body">
+          <ul>
+            <li>Practical instruction across Introduction to Robotics, Internet of Things, Applied Physics, and Digital Logic Design.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-date">FEB 2024 — MAY 2024</div>
+        <div class="log-role display">IoT &amp; Robotics Course Instructor</div>
+        <div class="log-org">Aror University of Art, Architecture, Design and Heritage</div>
+        <div class="log-body">
+          <ul>
+            <li>Guided student projects using Arduino, ESP32, and Raspberry Pi; interfaced IR, ultrasonic, and moisture sensors with motors, relays, and servos.</li>
+            <li>Taught embedded C and MicroPython for sensor-actuator control.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-date">OCT 2020 — SEP 2022</div>
+        <div class="log-role display">Robotics and Automation Instructor</div>
+        <div class="log-org">Sukkur IBA University</div>
+        <div class="log-body">
+          <ul>
+            <li>Developed curriculum, lesson plans, and project-based assignments for robotics and automation courses.</li>
+            <li>Facilitated hands-on labs and designed assessments to evaluate student skill development.</li>
+          </ul>
+          <a class="log-cert" href="https://github.com/AbdulRasheed-01/Certification/blob/main/Robotics%20and%20Automation.png" target="_blank" rel="noopener">View employment certificate →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="builds">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Builds</h2>
+      <span class="sec-index eyebrow">04 / PROJECTS &amp; RESEARCH</span>
+    </div>
+    <div class="build-grid" data-reveal>
+      <div class="build-card">
+        <div class="build-tag">Final year thesis</div>
+        <div class="build-title display">Autonomous Robotic Arm — CV Color Sorting</div>
+        <p class="build-desc">A robotic arm capable of autonomous articulation and color sorting, from mechanical design and actuator integration through a real-time computer-vision perception pipeline.</p>
+        <a class="build-link" href="https://github.com/AbdulRasheed-01/Final-Year-Project" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">Published research</div>
+        <div class="build-title display">NAO Vision Control &amp; Kick Motion Generation</div>
+        <p class="build-desc">Research on humanoid vision-guided control and kick motion generation, submitted to VFAST Transactions on Software Engineering.</p>
+        <a class="build-link" href="https://vfast.org/journals/index.php/VTSE/article/view/1836" target="_blank" rel="noopener">Read the paper →</a>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">In review — SAIROB 2026 (IEEE)</div>
+        <div class="build-title display">Enhancing Miro-e Robot with RViz Support, AI Applications &amp; Streamlit Control</div>
+        <p class="build-desc">Submitted to the IEEE International Conference on Space, AI, and Robotics (SAIROB 2026); publication in process.</p>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">Applied HRI</div>
+        <div class="build-title display">GPT-Based Multilingual Conversation Pipeline for Pepper</div>
+        <p class="build-desc">Designed and deployed a GPT-based multilingual conversation pipeline on the Pepper humanoid, integrating AI-driven human-robot interaction.</p>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">Experimental study</div>
+        <div class="build-title display">Pepper Humanoid Robot as a Classroom Teacher</div>
+        <p class="build-desc">An experimental study exploring Pepper's viability as a classroom instructor, evaluating engagement and pedagogical interaction.</p>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">IoT / safety</div>
+        <div class="build-title display">Safe Drive — Driver Fatigue Detection System</div>
+        <p class="build-desc">An IoT-based system for real-time detection of driver fatigue to reduce road-safety risk.</p>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">Assistive tech</div>
+        <div class="build-title display">Autistic Child Monitoring System (ACMS)</div>
+        <p class="build-desc">A monitoring system designed to support caregivers in tracking behavior and wellbeing of autistic children.</p>
+      </div>
+      <div class="build-card">
+        <div class="build-tag">Assistive tech</div>
+        <div class="build-title display">AI-Powered Wearable for the Visually Impaired</div>
+        <p class="build-desc">A wearable device using AI-driven perception to help visually impaired users navigate and interact with their environment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="grants">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Grants &amp; Recognition</h2>
+      <span class="sec-index eyebrow">05 / FUNDING</span>
+    </div>
+    <div class="grant-list" data-reveal>
+      <div class="grant-row">
+        <span class="grant-date mono">2025</span>
+        <span class="grant-name">Proposal Grant, Co-PI — PKR 1.354M</span>
+        <span class="grant-org">SINDH HEC</span>
+      </div>
+      <div class="grant-row">
+        <span class="grant-date mono">2023</span>
+        <span class="grant-name">Proposal Grant — AI flood-alert chatbot for Sindh, PKR 2M</span>
+        <span class="grant-org">SINDH HEC</span>
+      </div>
+      <div class="grant-row">
+        <span class="grant-date mono">2015</span>
+        <span class="grant-name">Fully Funded Scholarship — full Bachelor's program</span>
+        <span class="grant-org">SUKKUR IBA UNIVERSITY</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Spec Sheet</h2>
+      <span class="sec-index eyebrow">06 / SKILLS</span>
+    </div>
+    <div class="spec-grid" data-reveal>
+      <div>
+        <div class="spec-group-title">Mechanical</div>
+        <div class="spec-items">
+          <div><span>01</span>SolidWorks &amp; TinkerCAD</div>
+          <div><span>02</span>3D design &amp; printing</div>
+          <div><span>03</span>Rapid prototyping</div>
+        </div>
+      </div>
+      <div>
+        <div class="spec-group-title">Electrical / Embedded</div>
+        <div class="spec-items">
+          <div><span>01</span>Arduino, ESP32</div>
+          <div><span>02</span>Raspberry Pi, STM32</div>
+          <div><span>03</span>Hardware troubleshooting</div>
+        </div>
+      </div>
+      <div>
+        <div class="spec-group-title">Software</div>
+        <div class="spec-items">
+          <div><span>01</span>Python, C, C++</div>
+          <div><span>02</span>ROS / ROS2, Gazebo</div>
+          <div><span>03</span>OpenCV, PyTorch, YOLO</div>
+        </div>
+      </div>
+      <div>
+        <div class="spec-group-title">Lab Operations</div>
+        <div class="spec-items">
+          <div><span>01</span>Inventory &amp; documentation</div>
+          <div><span>02</span>Safety protocol compliance</div>
+          <div><span>03</span>Training &amp; mentoring</div>
+        </div>
+      </div>
+      <div>
+        <div class="spec-group-title">Foundations</div>
+        <div class="spec-items">
+          <div><span>01</span>Linear Algebra, Calculus, ODEs</div>
+          <div><span>02</span>Probability &amp; Statistics</div>
+          <div><span>03</span>Machine &amp; Deep Learning theory</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="learning">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">Continuing Education</h2>
+      <span class="sec-index eyebrow">07 / COURSES &amp; CERTIFICATIONS</span>
+    </div>
+    <div class="spec-grid" data-reveal>
+      <div>
+        <div class="spec-group-title">ROS &amp; Robotics</div>
+        <div class="spec-items">
+          <div><span>01</span><a href="https://www.coursera.org/account/accomplishments/records/QPSKJW3XW6RR" target="_blank" rel="noopener">ROS 2 Foundations: Architecture, Programming &amp; Core Concepts</a> — Packt, 2026</div>
+          <div><span>02</span><a href="https://www.coursera.org/account/accomplishments/records/64XZK9NBNH77" target="_blank" rel="noopener">Robot Modeling, Simulation &amp; Control with ROS 2</a> — Packt, 2026</div>
+          <div><span>03</span><a href="https://www.coursera.org/account/accomplishments/specialization/5P72HGOKHEX6" target="_blank" rel="noopener">Mastering ROS 2 for Robotics Programming (Specialization)</a> — Packt, 2026</div>
+          <div><span>04</span><a href="https://www.coursera.org/account/accomplishments/records/608T4YDWS0UP" target="_blank" rel="noopener">ROS 2 from Scratch</a> — Packt, 2026</div>
+          <div><span>05</span><a href="https://www.coursera.org/account/accomplishments/records/402A1S6DO4D0" target="_blank" rel="noopener">Robot Localization with Python &amp; Particle Filters</a> — Coursera, 2026</div>
+          <div><span>06</span>Code Foundation for ROS — The Construct Robotics Institute, 2023</div>
+          <div><span>07</span><a href="https://github.com/AbdulRasheed-01/Certification/blob/main/ROS%20Basics.pdf" target="_blank" rel="noopener">ROS / ROS2</a> — Udemy, 2023</div>
+          <div><span>08</span><a href="https://github.com/AbdulRasheed-01/Certification/blob/main/Linux%20for%20Robotics.pdf" target="_blank" rel="noopener">Linux for Robotics</a> — The Construct, 2023</div>
+        </div>
+      </div>
+      <div>
+        <div class="spec-group-title">AI, ML &amp; Computer Vision</div>
+        <div class="spec-items">
+          <div><span>01</span><a href="https://www.coursera.org/account/accomplishments/records/8K817NTUH17N" target="_blank" rel="noopener">Deep Learning for Computer Vision: Techniques &amp; Applications</a> — Khalifa University, 2026</div>
+          <div><span>02</span><a href="https://www.coursera.org/account/accomplishments/records/TNQ2ZFC0BM2Y" target="_blank" rel="noopener">Foundations of Deep Reinforcement Learning with PyTorch</a> — Packt, 2026</div>
+          <div><span>03</span><a href="https://www.coursera.org/account/accomplishments/records/8ILK15ZOR95X" target="_blank" rel="noopener">Artificial Intelligence for Robotics</a> — Packt, 2026</div>
+          <div><span>04</span><a href="https://www.coursera.org/account/accomplishments/records/MSZEJ0Z48PV5" target="_blank" rel="noopener">AI for Autonomous Vehicles &amp; Robotics</a> — University of Michigan, 2026</div>
+          <div><span>05</span><a href="https://www.coursera.org/account/accomplishments/records/DCQO03YCDI80" target="_blank" rel="noopener">Deep Learning – Crash Course</a> — Packt, 2026</div>
+          <div><span>06</span><a href="https://github.com/AbdulRasheed-01/Certification/blob/main/Computer%20Vision.pdf" target="_blank" rel="noopener">Computer Vision</a> — Sukkur IBA University, 2023</div>
+          <div><span>07</span><a href="https://www.coursera.org/account/accomplishments/verify/BVAM6JVG6ZJ8" target="_blank" rel="noopener">Python for Data Science, AI &amp; Development</a> — IBM, 2023</div>
+        </div>
+      </div>
+      <div>
+        <div class="spec-group-title">Applied &amp; Emerging Tech</div>
+        <div class="spec-items">
+          <div><span>01</span><a href="https://www.coursera.org/account/accomplishments/records/X07Z0L54WNH2" target="_blank" rel="noopener">Large Language Models &amp; Generative AI Deployment (NVIDIA)</a> — Whizlabs, 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="references">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 class="sec-title display">References</h2>
+      <span class="sec-index eyebrow">08 / VERIFICATION</span>
+    </div>
+    <div class="grant-list" data-reveal>
+      <div class="grant-row">
+        <span class="grant-date mono">01</span>
+        <span class="grant-name">Afaque Manzoor, Ph.D. — Senior Lecturer, Dept. of Mechanical Engineering &amp; Materials Science, Washington University in St. Louis, USA · <a href="mailto:afaque@wustl.edu" style="color:var(--ink-dim);">afaque@wustl.edu</a></span>
+        <span class="grant-org">WASHU</span>
+      </div>
+      <div class="grant-row">
+        <span class="grant-date mono">02</span>
+        <span class="grant-name">Dr. Safeer Hyder — Senior Engineer, Context Vision, Sweden · <a href="mailto:safeer.hyder@contextvision.se" style="color:var(--ink-dim);">safeer.hyder@contextvision.se</a></span>
+        <span class="grant-org">CONTEXT VISION</span>
+      </div>
+      <div class="grant-row">
+        <span class="grant-date mono">03</span>
+        <span class="grant-name">Dr. Ghulam Mujtaba — HoD, Computer Science, Sukkur IBA University, Pakistan · <a href="mailto:mujtaba@iba-suk.edu.pk" style="color:var(--ink-dim);">mujtaba@iba-suk.edu.pk</a></span>
+        <span class="grant-org">SUKKUR IBA</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div data-reveal>
+      <div class="eyebrow" style="margin-bottom:14px;">09 / CONTACT</div>
+      <h2 class="footer-title display">Building the next robot, or running the lab it lives in — either way, let's talk.</h2>
+      <p class="footer-sub">Open to hardware, lab engineering, and technician roles, and to funded Master's opportunities in robotics.</p>
+      <div class="footer-grid">
+        <a class="footer-btn" href="mailto:abdulrasheed.be15@iba-suk.edu.pk">Send an email</a>
+        <a class="footer-btn" href="https://www.linkedin.com/in/abdul-rasheed-soomro" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <a class="footer-btn" href="https://github.com/AbdulRasheed-01" target="_blank" rel="noopener">See GitHub</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>AR-01 / REV 2026</span>
+      <span>SUKKUR, SINDH, PAKISTAN</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.remove('no-js');
+  try{
+    const els = document.querySelectorAll('[data-reveal]');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:0.12});
+    els.forEach(el=>io.observe(el));
+    // Safety net: if anything is still hidden after 4s (e.g. a host page blocks IO), reveal it anyway.
+    setTimeout(()=>{ els.forEach(el=>el.classList.add('in')); }, 4000);
+  }catch(err){
+    document.querySelectorAll('[data-reveal]').forEach(el=>el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
